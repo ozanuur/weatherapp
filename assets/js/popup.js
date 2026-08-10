@@ -1,6 +1,6 @@
 
-// Kendi OpenWeatherMap API anahtarınızı buraya girin
-// https://openweathermap.org/api adresinden ücretsiz alabilirsiniz
+// Enter your own OpenWeatherMap API key here
+// You can get one for free at https://openweathermap.org/api
 const apiKey = "";
 const iconMapping = {
     '01d': 'weather_tile_1-removebg-preview.png',
@@ -15,8 +15,8 @@ const iconMapping = {
 };
 
 const descriptionMapping = {
-    "Açık": "Güneşli",
-    "Kapalı": "Bulutlu"
+    "Clear": "Sunny",
+    "Overcast": "Cloudy"
 };
 
 function displayWeather(data) {
@@ -44,7 +44,7 @@ function displayWeather(data) {
     let iconFilename;
     if (mappedIconCode === '50d') {
         const descLower = description.toLowerCase();
-        if (descLower.includes('sis')) {
+        if (descLower.includes('fog')) {
             iconFilename = 'weather_tile_8-removebg-preview.png';
         } else {
             iconFilename = 'weather_tile_7-removebg-preview.png';
@@ -62,69 +62,44 @@ searchBtn.addEventListener("click", () => {
     const cityLower = citySearch.toLowerCase();
 
     const mockDataMapping = {
-        "test-güneşli": {
-            name: "Güneşli (Açık) Test",
-            weather: [{ id: 800, icon: "01d", description: "açık" }],
+        "test-sunny": {
+            name: "Sunny (Clear) Test",
+            weather: [{ id: 800, icon: "01d", description: "clear" }],
             main: { temp: 28 }
         },
-        "test-gunesli": {
-            name: "Güneşli (Açık) Test",
-            weather: [{ id: 800, icon: "01d", description: "açık" }],
-            main: { temp: 28 }
-        },
-        "test-azbulutlu": {
-            name: "Az Bulutlu Test",
-            weather: [{ id: 801, icon: "02d", description: "az bulutlu" }],
+        "test-partly-cloudy": {
+            name: "Partly Cloudy Test",
+            weather: [{ id: 801, icon: "02d", description: "partly cloudy" }],
             main: { temp: 21 }
         },
-        "test-bulutlu": {
-            name: "Bulutlu (Kapalı) Test",
-            weather: [{ id: 804, icon: "04d", description: "kapalı" }],
+        "test-cloudy": {
+            name: "Cloudy (Overcast) Test",
+            weather: [{ id: 804, icon: "04d", description: "overcast" }],
             main: { temp: 14 }
         },
-        "test-yağmurlu": {
-            name: "Yağmurlu Test",
-            weather: [{ id: 500, icon: "10d", description: "yağmurlu" }],
+        "test-rainy": {
+            name: "Rainy Test",
+            weather: [{ id: 500, icon: "10d", description: "rainy" }],
             main: { temp: 11 }
         },
-        "test-yagmurlu": {
-            name: "Yağmurlu Test",
-            weather: [{ id: 500, icon: "10d", description: "yağmurlu" }],
-            main: { temp: 11 }
-        },
-        "test-fırtına": {
-            name: "Gök Gürültülü Test",
-            weather: [{ id: 211, icon: "11d", description: "gök gürültülü fırtına" }],
+        "test-storm": {
+            name: "Thunderstorm Test",
+            weather: [{ id: 211, icon: "11d", description: "thunderstorm" }],
             main: { temp: 18 }
         },
-        "test-firtina": {
-            name: "Gök Gürültülü Test",
-            weather: [{ id: 211, icon: "11d", description: "gök gürültülü fırtına" }],
-            main: { temp: 18 }
-        },
-        "test-kar": {
-            name: "Karlı Test",
-            weather: [{ id: 600, icon: "13d", description: "karlı" }],
+        "test-snow": {
+            name: "Snowy Test",
+            weather: [{ id: 600, icon: "13d", description: "snowy" }],
             main: { temp: -2 }
         },
-        "test-karlı": {
-            name: "Karlı Test",
-            weather: [{ id: 600, icon: "13d", description: "karlı" }],
-            main: { temp: -2 }
-        },
-        "test-sis": {
-            name: "Sisli Test",
-            weather: [{ id: 701, icon: "50d", description: "sisli" }],
+        "test-fog": {
+            name: "Foggy Test",
+            weather: [{ id: 701, icon: "50d", description: "foggy" }],
             main: { temp: 7 }
         },
-        "test-rüzgar": {
-            name: "Rüzgarlı (Puslu) Test",
-            weather: [{ id: 771, icon: "50d", description: "puslu" }],
-            main: { temp: 16 }
-        },
-        "test-ruzgar": {
-            name: "Rüzgarlı (Puslu) Test",
-            weather: [{ id: 771, icon: "50d", description: "puslu" }],
+        "test-wind": {
+            name: "Windy (Hazy) Test",
+            weather: [{ id: 771, icon: "50d", description: "hazy" }],
             main: { temp: 16 }
         }
     };
@@ -134,12 +109,12 @@ searchBtn.addEventListener("click", () => {
         return;
     }
 
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${citySearch}&appid=${apiKey}&lang=tr&units=metric`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${citySearch}&appid=${apiKey}&lang=en&units=metric`;
 
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) {
-                throw new Error("Konum bulunamadı");
+                throw new Error("Location not found");
             }
             return response.json();
         })
@@ -147,8 +122,8 @@ searchBtn.addEventListener("click", () => {
             displayWeather(data);
         })
         .catch(error => {
-            console.log("Hata:", error);
-            document.getElementById("temp").innerHTML = "<p>Düzgün Konum Giriniz!</p>";
+            console.log("Error:", error);
+            document.getElementById("temp").innerHTML = "<p>Please enter a valid location!</p>";
         });
 });
 
