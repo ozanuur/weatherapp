@@ -1,7 +1,6 @@
+const BACKEND_URL = "https://weatherapp-ashy-two.vercel.app";
+const APP_SECRET = "35a38b885229296a526d6115192daff9fd20e4befc37b946";
 
-// Enter your own OpenWeatherMap API key here
-// You can get one for free at https://openweathermap.org/api
-const apiKey = "";
 const iconMapping = {
     '01d': 'weather_tile_1-removebg-preview.png',
     '02d': 'weather_tile_3-removebg-preview.png',
@@ -109,21 +108,26 @@ searchBtn.addEventListener("click", () => {
         return;
     }
 
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${citySearch}&appid=${apiKey}&lang=en&units=metric`;
+    const apiUrl = `${BACKEND_URL}/api/weather?city=${encodeURIComponent(citySearch)}`;
 
-    fetch(apiUrl)
-        .then(response => {
+    fetch(apiUrl, {
+        headers: {
+            "X-IonFlux-Token": APP_SECRET
+        }
+    })
+        .then(async response => {
+            const data = await response.json();
             if (!response.ok) {
-                throw new Error("Location not found");
+                throw new Error(data.message || data.error || "Location not found");
             }
-            return response.json();
+            return data;
         })
         .then(data => {
             displayWeather(data);
         })
         .catch(error => {
-            console.log("Error:", error);
-            document.getElementById("temp").innerHTML = "<p>Please enter a valid location!</p>";
+            console.error("Error:", error);
+            document.getElementById("temp").innerHTML = `<p>${error.message || "Please enter a valid location!"}</p>`;
         });
 });
 

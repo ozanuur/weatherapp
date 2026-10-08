@@ -1,0 +1,17 @@
+{
+  "name": "ionflux-weather-backend",
+  "version": "1.0.0",
+  "description": "Vercel Serverless Backend Proxy for IonFlux Chrome Extension",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "keywords": [
+    "chrome-extension",
+    "weather",
+    "vercel",
+    "serverless"
+  ],
+  "author": "",
+  "license": "MIT"
+}
